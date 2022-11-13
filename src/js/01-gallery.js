@@ -1,19 +1,27 @@
-import { galleryItems } from './gallery-items';
-
+// Add imports above this line
+import galleryItems from './gallery-items.json';
 import SimpleLightbox from "simplelightbox";
-
 import "simplelightbox/dist/simple-lightbox.min.css";
 
-const makeGalleryItems = element => {
-  const { preview, original, description } = element;
-  return `<a class="gallery__item" href="${original}">
-  <img class="gallery__image" src="${preview}" alt="${description}" /> </a>`;
-};
-const gallery = document.querySelector('.gallery');
-const makeGallery = galleryItems.map(makeGalleryItems).join('');
-gallery.innerHTML = makeGallery;
+const galleryItem = document.querySelector('.gallery');
+const ItemsMarkup = galleryItemsMarkup(galleryItems);
 
-var lightbox = new SimpleLightbox('.gallery a', {
+galleryItem.innerHTML = ItemsMarkup;
+
+let imageLightBox = new SimpleLightbox('.gallery a', {
+  captionPosition: 'bottom',
   captionsData: 'alt',
+  captionDelay: 250,
+    captionClass: 'bgColor',
 });
-console.log(galleryItems);
+
+function galleryItemsMarkup(gallery) {
+  return galleryItems
+    .map(
+      ({ preview, original, description }) =>
+        ` <a class="gallery__item" href="${original}">
+            <img class="gallery__image" loading="lazy" src="${preview}" alt="${description}" />
+        </a> `
+    )
+    .join('');
+}
